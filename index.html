@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="citydata.js"></script>
+	<script src="zepto.min.js"></script>
+</head>
+<body>
+	<select name="province" id="address1" style="width: 20%;">
+						<option value="山西" >山西</option>
+					</select>
+					<select name="city" id="address2" style="width: 20%;">
+						<option value="运城市" >运城市</option>
+					</select>
+</body>
+<script>
+	var province=$("select[name='province']");
+	var city=$("select[name='city']");
+	var pro=province.val();
+	var cty=city.val();
+	function change_city(){
+		var index=province.get(0).selectedIndex;
+		var clen=provinceList[index].cityList.length;
+		var str="";
+		for(var i=0;i<clen;i++){
+			str+='<option value="' + provinceList[index].cityList[i] + '">'+provinceList[index].cityList[i]+'</option>'
+		}
+		city.html(str);
+		city.find("option").each(function(){
+				if($(this).val()==cty){
+					$(this).attr("selected","true");
+				}
+			})
+		/*加载城市*/
+	}
+	(function citys(province,city){
+		province.focus(function(){
+			if(province.find("option").length<2){
+				var plen=provinceList.length;
+				var str="";
+				for(var i=0;i<plen;i++){
+					str+='<option value="'+ provinceList[i].name +'">'+provinceList[i].name+'</option>'
+				}
+				province.html(str);
+			}
+			/*加载省份*/
+			province.find("option").each(function(){
+				if($(this).val()==pro){
+					$(this).attr("selected","true");
+				}
+			})
+//			province.get(0).selectedIndex=0;
+			change_city(cty)
+		})
+		/*provice*/
+		province.change(function(){
+			change_city()
+		})
+		/*city*/
+	})(province,city,pro,cty)
+</script>
+</html>
